@@ -1,18 +1,39 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.leeuuong.pojoeach</id>
-    <name>pojo-each Template</name>
-    <vendor>leeuuong</vendor>
+    <id>com.github.leoliudong.pojoeach</id>
+    <name>Pojo-Each</name>
+    <vendor>liliudong</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.leeuuong.pojoeach.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-    </extensions>
+    <description>
+        <![CDATA[
+            This plugin is designed to facilitate the bi-directional conversion
+             of POJO objects. It allows for conversions
+            such as transforming a Value Object (VO) into an Entity,
+            converting a Data Transfer Object (DTO) into a Value Object (VO),
+            or converting a Data Transfer Object (DTO) into an Entity,
+            among others. This operation significantly reduces development
+            time by providing a quick and efficient way to handle object
+            transformations. To use the plugin, simply copy the class name
+             of the source for conversion, then select the target object
+             class name. Use the shortcut Alt + Insert (Command + N on Mac)
+             and choose "Pojo Each."
+        ]]>
+    </description>
 
     <applicationListeners>
-        <listener class="com.github.leeuuong.pojoeach.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>
+        <listener class="com.github.leoliudong.pojoeach.listeners.MyApplicationActivationListener"
+                  topic="com.intellij.openapi.application.ApplicationActivationListener"/>
     </applicationListeners>
+
+    <actions>
+        <action id="com.github.leoliudong.pojoeach.CodeGenerationButtonAction"
+                class="com.github.leoliudong.pojoeach.action.CodeGenerationButtonAction"
+                text="Pojo Each"
+                description="Click to generate code">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>

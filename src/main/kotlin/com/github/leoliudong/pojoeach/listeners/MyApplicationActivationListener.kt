@@ -1,4 +1,4 @@
-package com.github.leeuuong.pojoeach.listeners
+package com.github.leoliudong.pojoeach.listeners
 
 import com.intellij.openapi.application.ApplicationActivationListener
 import com.intellij.openapi.diagnostic.thisLogger
