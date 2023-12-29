@@ -1,4 +1,4 @@
-# pojo-each
+# pojo-convert
 
 ![Build](https://github.com/leoliudong/pojo-each/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
@@ -24,12 +24,17 @@
   about releases containing new features and fixes.
 
 <!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
-
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be
-extracted by the [Gradle](/build.gradle.kts) during the build process.
-
-To keep everything working, do not remove `<!-- ... -->` sections.
+This plugin is designed to facilitate the bi-directional conversion
+of POJO objects. It allows for conversions
+such as transforming a Value Object (VO) into an Entity,
+converting a Data Transfer Object (DTO) into a Value Object (VO),
+or converting a Data Transfer Object (DTO) into an Entity,
+among others. This operation significantly reduces development
+time by providing a quick and efficient way to handle object
+transformations. To use the plugin, simply copy the class name
+of the source for conversion, then select the target object
+class name. Use the shortcut Alt + Insert (Command + N on Mac)
+and choose "Pojo Each."
 <!-- Plugin description end -->
 
 ## Installation

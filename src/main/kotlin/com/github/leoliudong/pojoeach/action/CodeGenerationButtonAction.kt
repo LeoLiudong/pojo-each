@@ -71,6 +71,7 @@ class CodeGenerationButtonAction : AnAction() {
 
         val targetFields = targetPsiClass!!.fields
             .map { field -> field.name }
+            .filter { "serialVersionUID" != it }
             .toTypedArray()
 
         // 获取选中行文本
@@ -78,32 +79,30 @@ class CodeGenerationButtonAction : AnAction() {
         // 提取对象名称
         val fromObjectName = clipboardText.replaceFirstChar { if (it.isUpperCase()) it.lowercaseChar() else it }
         val objectName = getObjectName(currentLineText)
+        val document: Document = editor.document
+        val caretModel = editor.caretModel
+        val currentLine = caretModel.logicalPosition.line
+        // 获取当前行的空白字符
+        val lineText = getLineText(document, currentLine)
+        val indentString = getIndentation(lineText)
+
+        val resultStr = targetFields.map {
+            val capitalize = it.capitalize()
+            if (fromFields.contains(it)) {
+                "$indentString$objectName.set$capitalize($fromObjectName.get$capitalize());\n"
+            } else {
+                "$indentString$objectName.set$capitalize();\n"
+            }
+        }.joinToString("")
 
         WriteCommandAction.runWriteCommandAction(project) {
-            targetFields.map { name ->
-                {
-                    val capitalize = name.capitalize()
-                    if (fromFields.contains(name)) {
-                        "$objectName.set$capitalize($fromObjectName.get$capitalize());"
-                    } else {
-                        "$objectName.set$capitalize();"
-                    }
-                }
-            }.forEach { text ->
-                val document: Document = editor.document
-                val caretModel = editor.caretModel
-                val currentLine = caretModel.logicalPosition.line
-                // 获取当前行的空白字符
-                val lineText = getLineText(document, currentLine)
-                val indentString = getIndentation(lineText)
-                val nextLineStartOffset = document.getLineEndOffset(currentLine) + 1
-                // 在下一行插入文本，并使用相同的空白字符对齐
-                document.insertString(nextLineStartOffset, "$indentString${text()}\n")
-                // 移动光标到插入文本的末尾
-                caretModel.moveToOffset(nextLineStartOffset)
-                // 通知 PsiDocumentManager 文档已被修改
-                PsiDocumentManager.getInstance(project).commitDocument(document)
-            }
+            val nextLineStartOffset = document.getLineEndOffset(currentLine) + 1
+            // 在下一行插入文本，并使用相同的空白字符对齐
+            document.insertString(nextLineStartOffset, resultStr)
+            // 移动光标到插入文本的末尾
+            caretModel.moveToOffset(nextLineStartOffset)
+            // 通知 PsiDocumentManager 文档已被修改
+            PsiDocumentManager.getInstance(project).commitDocument(document)
         }
     }
 
